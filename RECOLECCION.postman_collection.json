@@ -1,0 +1,4172 @@
+{
+	"info": {
+		"_postman_id": "9e722185-b359-4f21-9979-77ccad0a631d",
+		"name": "MUTA",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29235200"
+	},
+	"item": [
+		{
+			"name": "sessions",
+			"item": [
+				{
+					"name": "createUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Response status code is 200', function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"})\r",
+									"\r",
+									"pm.test('Response message is \\'USUARIO YA SE ENCUENTRA REGISTRADO\\'', function () {\r",
+									"    pm.expect(pm.response.text()).to.include('USUARIO YA SE ENCUENTRA REGISTRADO');\r",
+									"})\r",
+									"\r",
+									"pm.test('User is not created in the database', function () {\r",
+									"    pm.expect(pm.response.text()).to.include('USUARIO YA SE ENCUENTRA REGISTRADO');\r",
+									"})\r",
+									"\r",
+									"pm.test(\"User and password fields are required\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData).to.have.property('error');\r",
+									"    pm.expect(responseData.error).to.include(\"user\");\r",
+									"    pm.expect(responseData.error).to.include(\"password\");\r",
+									"});\r",
+									"\r",
+									"pm.test('User and password fields are not empty', function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.user).to.exist.and.to.have.lengthOf.at.least(1, 'User field should not be empty');\r",
+									"    pm.expect(responseData.password).to.exist.and.to.have.lengthOf.at.least(1, 'Password field should not be empty');\r",
+									"})\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user\": \"fgarcia16\",\r\n    \"password\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/session/create",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"session",
+								"create"
+							]
+						},
+						"description": "se le pasa user y password al servicio y este creará un nuevo usuario en la base de datos"
+					},
+					"response": [
+						{
+							"name": "usuario-ya-registrado",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"user\": \"fgarcia\",\r\n    \"password\": \"123456\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/session/create",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"session",
+										"create"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "34"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"22-67zKOqYCJQqpaAdLias/NIw1mjM\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 21:39:53 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "USUARIO YA SE ENCUENTRA REGISTRADO"
+						},
+						{
+							"name": "parametros-faltantes",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/session/create",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"session",
+										"create"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "63"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"3f-Lukvryp1B5a2r3mLNLwig6bmK/o\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 21:40:56 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    \"El usuario es obligatorio.\",\n    \"La contraseña es obligatoria.\"\n]"
+						},
+						{
+							"name": "usuario-creado",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"user\": \"fgarcia16\",\r\n    \"password\": \"123456\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/session/create",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"session",
+										"create"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "24"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"18-etC6ktSCmHizYqk5y+90mXFvzps\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 21:41:19 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "USUARIO CREADO CON EXITO"
+						},
+						{
+							"name": "error-al-crear",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"user\": \"fgarcia16\",\r\n    \"password\": \"123456\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/session/create",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"session",
+										"create"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "22"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"16-ER+h8M9HaAfdzjfAPog0OljvqhA\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:44:55 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "ERROR AL CREAR USUARIO"
+						}
+					]
+				},
+				{
+					"name": "getToken",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user\": \"fgarcia15\",\r\n    \"password\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/session/login",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"session",
+								"login"
+							]
+						},
+						"description": "se consulta con el usuario y contaseña si ya se encuentra registrado el usuario en caso de que así sea se generará un token de acceso para el usuario"
+					},
+					"response": [
+						{
+							"name": "generacion-token",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"user\": \"fgarcia15\",\r\n    \"password\": \"123456\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/session/login",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"session",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "173"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"ad-vPPM4K1KvcQhkw7j//lQRmDDP+k\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 21:42:12 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"respuesta\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY3NzMyLCJleHAiOjE2OTI1NjgzMzJ9.L4HY9XxSM1o2aqy00zZDKVuQ6lLs-jXD1FUqVDMa4G8\"\n}"
+						},
+						{
+							"name": "propiedades-faltantes",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/session/login",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"session",
+										"login"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "63"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"3f-Lukvryp1B5a2r3mLNLwig6bmK/o\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 21:42:47 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    \"El usuario es obligatorio.\",\n    \"La contraseña es obligatoria.\"\n]"
+						},
+						{
+							"name": "sin-autorizacion",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"user\": \"fgarcia151\",\r\n    \"password\": \"123456\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/session/login",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"session",
+										"login"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "37"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"25-LGn6Y2ImUatYv4d1lSbBoTJ0PlI\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 21:43:06 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"respuesta\": \"USUARIO NO REGISTRADO\"\n}"
+						},
+						{
+							"name": "error-al-cosultar",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"user\": \"fgarcia15\",\r\n    \"password\": \"123456\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/session/login",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"session",
+										"login"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "26"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1a-teS+b+ks2+AtZE3FeKGb9WBwtVA\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:45:15 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "ERROR AL CONSULTAR USUARIO"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "materials",
+			"item": [
+				{
+					"name": "createMaterial",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY5ODIzLCJleHAiOjE2OTI1NzA0MjN9.ec35xWoXi33_se0oEdygwvqK6oYO1kBfG_BSke3Vu70",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"CARTON 2\",\r\n    \"weight\": 1,\r\n    \"value\": 3000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/materials",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"materials"
+							]
+						},
+						"description": "En este servicio se crean los materiales reciclables.\n\nRecibe como parametros un body que cuenta con json con las propiedades del producto a crear"
+					},
+					"response": [
+						{
+							"name": "sin-autorizacion",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTU3Mjc4LCJleHAiOjE2OTI1NTc4Nzh9.DBmb7ztn9HxZ_so2OimoodQbLJLvZjQTDLhCBSAMmZo",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"CARTON\",\r\n    \"weight\": 1,\r\n    \"value\": 3000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/materials",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"materials"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "14"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"e-rvEyMwmxyEgLQ73t2Nk6JyIObqg\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 21:53:13 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "TOKEN INVALIDO"
+						},
+						{
+							"name": "material-ya-registrado",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY4NDcxLCJleHAiOjE2OTI1NjkwNzF9.LJQ41oftPeVe6q1rvTqj3Sghm8CDPyomGhOQjWiegqM",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"CARTON\",\r\n    \"weight\": 1,\r\n    \"value\": 3000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/materials",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"materials"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "38"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"26-6Q6cBLUaeZ0wTN2lSy/K4gXFLD4\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 21:54:42 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "EL MATERIAL YA SE ENCUENTRA REGISTRADO"
+						},
+						{
+							"name": "creacion-exitosa",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY4NDcxLCJleHAiOjE2OTI1NjkwNzF9.LJQ41oftPeVe6q1rvTqj3Sghm8CDPyomGhOQjWiegqM",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"CARTON 2\",\r\n    \"weight\": 1,\r\n    \"value\": 3000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/materials",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"materials"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "25"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"19-58rlDWXPMlsyTKDwDgAu6SdOnyU\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 21:55:05 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "MATERIAL CREADO CON EXITO"
+						},
+						{
+							"name": "propiedades-faltantes",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY4NDcxLCJleHAiOjE2OTI1NjkwNzF9.LJQ41oftPeVe6q1rvTqj3Sghm8CDPyomGhOQjWiegqM",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/materials",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"materials"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "73"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"49-TbCBp2d5C8El9FihnK40XynYJa0\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 21:55:56 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    \"name es obligatorio.\",\n    \"weight es obligatorio.\",\n    \"value es obligatorio.\"\n]"
+						},
+						{
+							"name": "error-al-crear",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY5ODIzLCJleHAiOjE2OTI1NzA0MjN9.ec35xWoXi33_se0oEdygwvqK6oYO1kBfG_BSke3Vu70",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"CARTON 2\",\r\n    \"weight\": 1,\r\n    \"value\": 3000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/materials",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"materials"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "23"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"17-CU/FF9KYzIGtzrfSlOYjMove7Rc\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:17:33 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "ERROR AL CREAR MATERIAL"
+						}
+					]
+				},
+				{
+					"name": "getAllMaterials",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY4NzI1LCJleHAiOjE2OTI1NjkzMjV9.oQHDr8hKklUQml2DUfMQXQcKihFfPaPMzcm2_a_qECM",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/materials",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"materials"
+							]
+						},
+						"description": "En este servicio se consultas todos los materiales almacenados"
+					},
+					"response": [
+						{
+							"name": "sin-autorizacion",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTU2OTI0LCJleHAiOjE2OTI1NTc1MjR9.BGHcJSi5S1wNyBZyJfwONHXzaUnThIJeoowNxd5vfS4",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "localhost:3000/materials",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"materials"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "14"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"e-rvEyMwmxyEgLQ73t2Nk6JyIObqg\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 21:58:25 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "TOKEN INVALIDO"
+						},
+						{
+							"name": "consulta-exitosa",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY4NzI1LCJleHAiOjE2OTI1NjkzMjV9.oQHDr8hKklUQml2DUfMQXQcKihFfPaPMzcm2_a_qECM",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "localhost:3000/materials",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"materials"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "383"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"17f-ijyD0mwS9FaaL+ZpvMKnJzGQaRI\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 21:59:05 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 3,\n        \"name\": \"CARTON\",\n        \"weight\": 1,\n        \"value\": 3000,\n        \"createdAt\": \"2023-08-20T18:54:11.559Z\",\n        \"updatedAt\": \"2023-08-20T18:54:11.559Z\"\n    },\n    {\n        \"id\": 2,\n        \"name\": \"PAPEL\",\n        \"weight\": 2,\n        \"value\": 5000,\n        \"createdAt\": \"2023-08-20T18:42:41.907Z\",\n        \"updatedAt\": \"2023-08-20T19:45:54.783Z\"\n    },\n    {\n        \"id\": 4,\n        \"name\": \"CARTON 2\",\n        \"weight\": 1,\n        \"value\": 3000,\n        \"createdAt\": \"2023-08-20T21:55:05.190Z\",\n        \"updatedAt\": \"2023-08-20T21:55:05.190Z\"\n    }\n]"
+						},
+						{
+							"name": "error-en-consulta",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY4NzI1LCJleHAiOjE2OTI1NjkzMjV9.oQHDr8hKklUQml2DUfMQXQcKihFfPaPMzcm2_a_qECM",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "localhost:3000/materials",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"materials"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "31"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1f-A8RhBlU5gq+CmbwgXAZ+hPPiukk\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:00:11 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "ERROR AL OBTENER LOS MATERIALES"
+						}
+					]
+				},
+				{
+					"name": "getMaterialById",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY4NzI1LCJleHAiOjE2OTI1NjkzMjV9.oQHDr8hKklUQml2DUfMQXQcKihFfPaPMzcm2_a_qECM",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/materials/2",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"materials",
+								"2"
+							]
+						},
+						"description": "Este servicio trae un material en especifico pasandose un id en el param, este id debe ser numerico y positivo"
+					},
+					"response": [
+						{
+							"name": "sin-autorizacion",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTU2OTI0LCJleHAiOjE2OTI1NTc1MjR9.BGHcJSi5S1wNyBZyJfwONHXzaUnThIJeoowNxd5vfS4",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "localhost:3000/materials/1",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"materials",
+										"1"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "14"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"e-rvEyMwmxyEgLQ73t2Nk6JyIObqg\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:04:16 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "TOKEN INVALIDO"
+						},
+						{
+							"name": "material-no-registrado",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY4NzI1LCJleHAiOjE2OTI1NjkzMjV9.oQHDr8hKklUQml2DUfMQXQcKihFfPaPMzcm2_a_qECM",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "localhost:3000/materials/1",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"materials",
+										"1"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "22"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"16-9Zzlg6GUtkRcFocSDnDAu6PuuKM\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:04:32 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "MATERIAL NO REGISTRADO"
+						},
+						{
+							"name": "material-consultado",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY4NzI1LCJleHAiOjE2OTI1NjkzMjV9.oQHDr8hKklUQml2DUfMQXQcKihFfPaPMzcm2_a_qECM",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "localhost:3000/materials/2",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"materials",
+										"2"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "125"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"7d-5ZI1tRLxl4t4tzmd6kFxqtD1Vn8\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:05:32 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 2,\n    \"name\": \"PAPEL\",\n    \"weight\": 2,\n    \"value\": 5000,\n    \"createdAt\": \"2023-08-20T18:42:41.907Z\",\n    \"updatedAt\": \"2023-08-20T19:45:54.783Z\"\n}"
+						},
+						{
+							"name": "parametro-no-valido",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY4NzI1LCJleHAiOjE2OTI1NjkzMjV9.oQHDr8hKklUQml2DUfMQXQcKihFfPaPMzcm2_a_qECM",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "localhost:3000/materials/0",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"materials",
+										"0"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "37"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"25-Zdfg5tm6Qnp9EV0wRF1yILfBVc4\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:05:47 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    \"El id debe ser un numero positivo\"\n]"
+						},
+						{
+							"name": "error-al-consultar",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY4NzI1LCJleHAiOjE2OTI1NjkzMjV9.oQHDr8hKklUQml2DUfMQXQcKihFfPaPMzcm2_a_qECM",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "localhost:3000/materials/2",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"materials",
+										"2"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "28"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1c-uWfTPP9Iu0zCujhXEXXPahHmuP4\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:06:47 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "ERROR AL OBTENER UN MATERIAL"
+						}
+					]
+				},
+				{
+					"name": "updateMaterial",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY5NDI0LCJleHAiOjE2OTI1NzAwMjR9.a2RykQ3eQsS1zHa1AFgK2O7J6VyTPjLMyMTRElzc6I8",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"PAPEL\",\r\n    \"weight\": 2,\r\n    \"value\": 5000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/materials/2",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"materials",
+								"2"
+							]
+						},
+						"description": "En este servicio se actualizan los materiales.\n\nse le paso como param el id del material a actualizar y en el body las propiedades nuevas del material"
+					},
+					"response": [
+						{
+							"name": "sin-autorizacion",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTYwNzA3LCJleHAiOjE2OTI1NjEzMDd9.LWk4hk-4rNaLT2lUHksG5m7hN4mqoQiYgr4NWAy4umY",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"PAPEL\",\r\n    \"weight\": 2,\r\n    \"value\": 5000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/materials/2",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"materials",
+										"2"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "14"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"e-rvEyMwmxyEgLQ73t2Nk6JyIObqg\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:10:03 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "TOKEN INVALIDO"
+						},
+						{
+							"name": "material-actualizado",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY5NDI0LCJleHAiOjE2OTI1NzAwMjR9.a2RykQ3eQsS1zHa1AFgK2O7J6VyTPjLMyMTRElzc6I8",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"PAPEL\",\r\n    \"weight\": 2,\r\n    \"value\": 5000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/materials/2",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"materials",
+										"2"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "30"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1e-VRY6ZWQQYX0I3ILNL9rwhxXLv04\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:10:36 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "MATERIAL ACTUALIZADO CON EXITO"
+						},
+						{
+							"name": "parametros-faltantes",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY5NDI0LCJleHAiOjE2OTI1NzAwMjR9.a2RykQ3eQsS1zHa1AFgK2O7J6VyTPjLMyMTRElzc6I8",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/materials/2",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"materials",
+										"2"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "73"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"49-TbCBp2d5C8El9FihnK40XynYJa0\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:11:23 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    \"name es obligatorio.\",\n    \"weight es obligatorio.\",\n    \"value es obligatorio.\"\n]"
+						},
+						{
+							"name": "material-duplicado",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY5NDI0LCJleHAiOjE2OTI1NzAwMjR9.a2RykQ3eQsS1zHa1AFgK2O7J6VyTPjLMyMTRElzc6I8",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"PAPEL\",\r\n    \"weight\": 2,\r\n    \"value\": 5000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/materials/4",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"materials",
+										"4"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "46"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"2e-3DboDzPKBKhAiPt0y7w1NltcjRc\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:11:57 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "OTRO MATERIAL YA CUENTA CON EL NOMBRE DE PAPEL"
+						},
+						{
+							"name": "error-al-actualizar",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY5NDI0LCJleHAiOjE2OTI1NzAwMjR9.a2RykQ3eQsS1zHa1AFgK2O7J6VyTPjLMyMTRElzc6I8",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"PAPEL\",\r\n    \"weight\": 2,\r\n    \"value\": 5000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/materials/2",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"materials",
+										"2"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "23"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"17-CU/FF9KYzIGtzrfSlOYjMove7Rc\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:13:24 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "ERROR AL CREAR MATERIAL"
+						}
+					]
+				},
+				{
+					"name": "deleteMaterial",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY5Njg4LCJleHAiOjE2OTI1NzAyODh9.Qnj_qk0scUclWOP5eTT-nUQUQ0tvLZl1Ty6X3VzFhX8",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/materials/2",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"materials",
+								"2"
+							]
+						},
+						"description": "En este servicio se borran los materiales.\n\nse le pasa como param el id del material a eliminar y se borra el registro del material."
+					},
+					"response": [
+						{
+							"name": "sin-autorizacion",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTU3Mjc4LCJleHAiOjE2OTI1NTc4Nzh9.DBmb7ztn9HxZ_so2OimoodQbLJLvZjQTDLhCBSAMmZo",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "localhost:3000/materials/1",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"materials",
+										"1"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "14"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"e-rvEyMwmxyEgLQ73t2Nk6JyIObqg\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:14:36 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "TOKEN INVALIDO"
+						},
+						{
+							"name": "material-no-registrado",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY5Njg4LCJleHAiOjE2OTI1NzAyODh9.Qnj_qk0scUclWOP5eTT-nUQUQ0tvLZl1Ty6X3VzFhX8",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "localhost:3000/materials/1",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"materials",
+										"1"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "38"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"26-zUukyc43ibzh9FMXqXLGMQUl1So\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:15:03 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "EL MATERIAL NO SE ENCUENTRA REGISTRADO"
+						},
+						{
+							"name": "material-eliminado",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY5Njg4LCJleHAiOjE2OTI1NzAyODh9.Qnj_qk0scUclWOP5eTT-nUQUQ0tvLZl1Ty6X3VzFhX8",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "localhost:3000/materials/2",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"materials",
+										"2"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "28"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1c-9/8D1ndouLEl5WrjCL4vWBIAZEE\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:15:17 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "MATERIAL ELIMINADO CON EXITO"
+						},
+						{
+							"name": "parametros-invalidos",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY5Njg4LCJleHAiOjE2OTI1NzAyODh9.Qnj_qk0scUclWOP5eTT-nUQUQ0tvLZl1Ty6X3VzFhX8",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "localhost:3000/materials/-1",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"materials",
+										"-1"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "37"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"25-Zdfg5tm6Qnp9EV0wRF1yILfBVc4\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:15:31 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    \"El id debe ser un numero positivo\"\n]"
+						},
+						{
+							"name": "error-al-eliminar",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY5Njg4LCJleHAiOjE2OTI1NzAyODh9.Qnj_qk0scUclWOP5eTT-nUQUQ0tvLZl1Ty6X3VzFhX8",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "localhost:3000/materials/2",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"materials",
+										"2"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "26"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1a-qx2bZ4pHV3lp37Tqs1dDgPAuM48\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:16:29 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "ERROR AL ELIMINAR MATERIAL"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "collections",
+			"item": [
+				{
+					"name": "createCollection",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY5OTgzLCJleHAiOjE2OTI1NzA1ODN9.rdZo1A3ebknQZK89f9OjXur5fIJhM7FN6jzVC3rpwNI",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"materialId\": 4,\r\n    \"amount\": 30,\r\n    \"date\": \"2023-08-18 07:36:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/collections",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"collections"
+							]
+						},
+						"description": "En este serivicio se crean las recolecciones relacionadas a los materiales.\n\nEn el body se envían las propiedades a crear incluyendo el id del material relacionado. El id del material tiene que ser valido y existente"
+					},
+					"response": [
+						{
+							"name": "sin-autorizacion",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTU3Mjc4LCJleHAiOjE2OTI1NTc4Nzh9.DBmb7ztn9HxZ_so2OimoodQbLJLvZjQTDLhCBSAMmZo",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"materialId\": 2,\r\n    \"amount\": 30,\r\n    \"date\": \"2023-08-18 07:36:00\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/collections",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"collections"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "14"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"e-rvEyMwmxyEgLQ73t2Nk6JyIObqg\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:19:30 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "TOKEN INVALIDO"
+						},
+						{
+							"name": "material-no-existe",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY5OTgzLCJleHAiOjE2OTI1NzA1ODN9.rdZo1A3ebknQZK89f9OjXur5fIJhM7FN6jzVC3rpwNI",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"materialId\": 2,\r\n    \"amount\": 30,\r\n    \"date\": \"2023-08-18 07:36:00\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/collections",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"collections"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "28"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1c-FypuTVIKTrRHG0d3NsuliqyCle0\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:19:52 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "NO EXISTE EL ID DEL MATERIAL"
+						},
+						{
+							"name": "creacion-recoleccion",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY5OTgzLCJleHAiOjE2OTI1NzA1ODN9.rdZo1A3ebknQZK89f9OjXur5fIJhM7FN6jzVC3rpwNI",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"materialId\": 4,\r\n    \"amount\": 30,\r\n    \"date\": \"2023-08-18 07:36:00\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/collections",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"collections"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "27"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1b-RQAnmqVT7MwPDYJ5C1ks524T6oc\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:20:11 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "RECOLECION CREADA CON EXITO"
+						},
+						{
+							"name": "parametros-invalidos",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY5OTgzLCJleHAiOjE2OTI1NzA1ODN9.rdZo1A3ebknQZK89f9OjXur5fIJhM7FN6jzVC3rpwNI",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/collections",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"collections"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "81"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"51-RVzTT7kr/Ay/nzTMnnx5iJXa0XU\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:20:27 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    \"El materialId es obligatorio.\",\n    \"amount es obligatoria.\",\n    \"date es obligatorio.\"\n]"
+						},
+						{
+							"name": "error-crear-recoleccion",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY5OTgzLCJleHAiOjE2OTI1NzA1ODN9.rdZo1A3ebknQZK89f9OjXur5fIJhM7FN6jzVC3rpwNI",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"materialId\": 4,\r\n    \"amount\": 30,\r\n    \"date\": \"2023-08-18 07:36:00\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/collections",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"collections"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "26"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1a-mLP5BNu+q/UjXXVluVsJ1saaTfI\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:21:06 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "ERROR AL CREAR RECOLECCION"
+						}
+					]
+				},
+				{
+					"name": "getAllCollections",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTcwNDUwLCJleHAiOjE2OTI1NzEwNTB9.BLgVQLiUywFmGiUtgJDzoFz0u7wj2w5EorlyeC6PQVk",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/collections",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"collections"
+							]
+						},
+						"description": "En este servicio se consultan todas las recoleccion ya realizadas"
+					},
+					"response": [
+						{
+							"name": "sin-autorizacion",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTU3Mjc4LCJleHAiOjE2OTI1NTc4Nzh9.DBmb7ztn9HxZ_so2OimoodQbLJLvZjQTDLhCBSAMmZo",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "localhost:3000/collections",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"collections"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "14"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"e-rvEyMwmxyEgLQ73t2Nk6JyIObqg\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:27:08 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "TOKEN INVALIDO"
+						},
+						{
+							"name": "consulta-exitosa",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTcwNDUwLCJleHAiOjE2OTI1NzEwNTB9.BLgVQLiUywFmGiUtgJDzoFz0u7wj2w5EorlyeC6PQVk",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "localhost:3000/collections",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"collections"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "300"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"12c-I9AUaiut6dtxejrdJnADCCh0lhM\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:27:40 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 1,\n        \"amount\": 35,\n        \"date\": \"2023-08-18T10:36:00.000Z\",\n        \"createdAt\": \"2023-08-20T18:49:47.745Z\",\n        \"updatedAt\": \"2023-08-20T18:52:40.522Z\",\n        \"materialId\": null\n    },\n    {\n        \"id\": 3,\n        \"amount\": 30,\n        \"date\": \"2023-08-18T07:36:00.000Z\",\n        \"createdAt\": \"2023-08-20T22:20:11.280Z\",\n        \"updatedAt\": \"2023-08-20T22:20:11.280Z\",\n        \"materialId\": 4\n    }\n]"
+						},
+						{
+							"name": "error-al-consultar",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTcwNDUwLCJleHAiOjE2OTI1NzEwNTB9.BLgVQLiUywFmGiUtgJDzoFz0u7wj2w5EorlyeC6PQVk",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "localhost:3000/collections",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"collections"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "36"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"24-hmkGSO4t9XB9MqJvaMxNy2qtT1I\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:28:12 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "ERROR AL CONSULTAR LAS RECOLECCIONES"
+						}
+					]
+				},
+				{
+					"name": "getCollectionById",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTcwNTM0LCJleHAiOjE2OTI1NzExMzR9.XYJrxASYfJqpJNSKU8eHJ82YykqgEe47fBxvsfYA4wY",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/collections/1",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"collections",
+								"1"
+							]
+						},
+						"description": "En este servicio se consulta una recoleccion en especifico pasandose por el param un id valido del registro de la recoleccion"
+					},
+					"response": [
+						{
+							"name": "sin-autorizacion",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTU3Mjc4LCJleHAiOjE2OTI1NTc4Nzh9.DBmb7ztn9HxZ_so2OimoodQbLJLvZjQTDLhCBSAMmZo",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "localhost:3000/collections/1",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"collections",
+										"1"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "14"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"e-rvEyMwmxyEgLQ73t2Nk6JyIObqg\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:28:41 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "TOKEN INVALIDO"
+						},
+						{
+							"name": "consulta-exitosa",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTcwNTM0LCJleHAiOjE2OTI1NzExMzR9.XYJrxASYfJqpJNSKU8eHJ82YykqgEe47fBxvsfYA4wY",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "localhost:3000/collections/1",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"collections",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "150"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"96-Z3jO3LeJRKycCtltH/8huGXcUu4\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:29:06 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"amount\": 35,\n    \"date\": \"2023-08-18T10:36:00.000Z\",\n    \"createdAt\": \"2023-08-20T18:49:47.745Z\",\n    \"updatedAt\": \"2023-08-20T18:52:40.522Z\",\n    \"materialId\": null\n}"
+						},
+						{
+							"name": "parametro-no-valido",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTcwNTM0LCJleHAiOjE2OTI1NzExMzR9.XYJrxASYfJqpJNSKU8eHJ82YykqgEe47fBxvsfYA4wY",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "localhost:3000/collections/-1",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"collections",
+										"-1"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "37"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"25-Zdfg5tm6Qnp9EV0wRF1yILfBVc4\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:29:57 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    \"El id debe ser un numero positivo\"\n]"
+						},
+						{
+							"name": "producto-inexistente",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTcwNTM0LCJleHAiOjE2OTI1NzExMzR9.XYJrxASYfJqpJNSKU8eHJ82YykqgEe47fBxvsfYA4wY",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "localhost:3000/collections/10",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"collections",
+										"10"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "25"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"19-cE5MCU77KA/tmL3e0Dy8p2F6kVo\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:30:12 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "RECOLECCION NO REGISTRADA"
+						},
+						{
+							"name": "error-en-consulta",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTcwNTM0LCJleHAiOjE2OTI1NzExMzR9.XYJrxASYfJqpJNSKU8eHJ82YykqgEe47fBxvsfYA4wY",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "localhost:3000/collections/1",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"collections",
+										"1"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "30"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1e-FRey0JXd+VU0THaDaPkGQv5oYbU\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:30:41 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "ERROR AL CONSULTAR RECOLECCION"
+						}
+					]
+				},
+				{
+					"name": "updateCollection",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTcwNzc3LCJleHAiOjE2OTI1NzEzNzd9.0hkvSGcJqIfOBWPnJ0v4dyy5ckC84frRwv8fljFheoA",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"materialId\": 4,\r\n    \"amount\": 35,\r\n    \"date\": \"2023-08-18 10:36:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/collections/1",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"collections",
+								"1"
+							]
+						},
+						"description": "En este servicio se actualizan las recolecciones ya existentes.\n\nse pasa el id valido de la recoleccion y en el body las propiedades nuevas a actualizar para cambiar el registro ya creado."
+					},
+					"response": [
+						{
+							"name": "sin-autorizacion",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTU3Mjc4LCJleHAiOjE2OTI1NTc4Nzh9.DBmb7ztn9HxZ_so2OimoodQbLJLvZjQTDLhCBSAMmZo",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"materialId\": 2,\r\n    \"amount\": 35,\r\n    \"date\": \"2023-08-18 10:36:00\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/collections/1",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"collections",
+										"1"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "14"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"e-rvEyMwmxyEgLQ73t2Nk6JyIObqg\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:32:40 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "TOKEN INVALIDO"
+						},
+						{
+							"name": "material-inexistente",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTcwNzc3LCJleHAiOjE2OTI1NzEzNzd9.0hkvSGcJqIfOBWPnJ0v4dyy5ckC84frRwv8fljFheoA",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"materialId\": 2,\r\n    \"amount\": 35,\r\n    \"date\": \"2023-08-18 10:36:00\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/collections/1",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"collections",
+										"1"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "28"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1c-FypuTVIKTrRHG0d3NsuliqyCle0\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:33:07 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "NO EXISTE EL ID DEL MATERIAL"
+						},
+						{
+							"name": "actualizacion-exitosa",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTcwNzc3LCJleHAiOjE2OTI1NzEzNzd9.0hkvSGcJqIfOBWPnJ0v4dyy5ckC84frRwv8fljFheoA",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"materialId\": 4,\r\n    \"amount\": 35,\r\n    \"date\": \"2023-08-18 10:36:00\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/collections/1",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"collections",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "33"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"21-NkAplX1FfTEA4qV4EjFFiFSao/M\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:33:25 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "RECOLECCION ACTUALIZADO CON EXITO"
+						},
+						{
+							"name": "parametros-invalidos",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTcwNzc3LCJleHAiOjE2OTI1NzEzNzd9.0hkvSGcJqIfOBWPnJ0v4dyy5ckC84frRwv8fljFheoA",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"materialId\": 4,\r\n    \"amount\": 35,\r\n    \"date\": \"2023-08-18 10:36:00\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/collections/1",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"collections",
+										"1"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "81"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"51-RVzTT7kr/Ay/nzTMnnx5iJXa0XU\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:33:39 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    \"El materialId es obligatorio.\",\n    \"amount es obligatoria.\",\n    \"date es obligatorio.\"\n]"
+						},
+						{
+							"name": "error-al-actualizar",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTcwNzc3LCJleHAiOjE2OTI1NzEzNzd9.0hkvSGcJqIfOBWPnJ0v4dyy5ckC84frRwv8fljFheoA",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"materialId\": 4,\r\n    \"amount\": 35,\r\n    \"date\": \"2023-08-18 10:36:00\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/collections/1",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"collections",
+										"1"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "34"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"22-pu7yfi8FrbkHOnVJVuaPWn5Rlv4\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:34:24 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "ERROR AL ACTUALIZAR LA RECOLECCION"
+						}
+					]
+				},
+				{
+					"name": "deleteCollection",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTcxMjA2LCJleHAiOjE2OTI1NzE4MDZ9.s2vBEFLL8YHXnDQCPl2gCAM6dxyn7Ba3ugBsEn5G9OE",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/collections/4",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"collections",
+								"4"
+							]
+						},
+						"description": "En este servicio se eliminan las recolecciones ya existentes.\n\nse le pasa un id valido por el param y se elimina el registro de la recoleccion"
+					},
+					"response": [
+						{
+							"name": "sin-autorizacion",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTU3Mjc4LCJleHAiOjE2OTI1NTc4Nzh9.DBmb7ztn9HxZ_so2OimoodQbLJLvZjQTDLhCBSAMmZo",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "localhost:3000/collections/2",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"collections",
+										"2"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "14"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"e-rvEyMwmxyEgLQ73t2Nk6JyIObqg\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:39:55 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "TOKEN INVALIDO"
+						},
+						{
+							"name": "recoleccion-no-registrada",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTcxMjA2LCJleHAiOjE2OTI1NzE4MDZ9.s2vBEFLL8YHXnDQCPl2gCAM6dxyn7Ba3ugBsEn5G9OE",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "localhost:3000/collections/2",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"collections",
+										"2"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "43"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"2b-9cqnrJoIT73nDsfZJRuLVrMy6Hc\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:40:17 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "ESTA RECOLECCION NO SE ENCUENTRA REGISTRADA"
+						},
+						{
+							"name": "eliminacion-exitosa",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTcxMjA2LCJleHAiOjE2OTI1NzE4MDZ9.s2vBEFLL8YHXnDQCPl2gCAM6dxyn7Ba3ugBsEn5G9OE",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "localhost:3000/collections/3",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"collections",
+										"3"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "31"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1f-75L4nOc/6TJBWkKFsC2/lyoSZ0Q\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:40:45 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "RECOLECCION ELIMINADA CON EXITO"
+						},
+						{
+							"name": "parametros-invalidos",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTcxMjA2LCJleHAiOjE2OTI1NzE4MDZ9.s2vBEFLL8YHXnDQCPl2gCAM6dxyn7Ba3ugBsEn5G9OE",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "localhost:3000/collections/-1",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"collections",
+										"-1"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "37"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"25-Zdfg5tm6Qnp9EV0wRF1yILfBVc4\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:40:58 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    \"El id debe ser un numero positivo\"\n]"
+						},
+						{
+							"name": "error-al-eliminar",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTcxMjA2LCJleHAiOjE2OTI1NzE4MDZ9.s2vBEFLL8YHXnDQCPl2gCAM6dxyn7Ba3ugBsEn5G9OE",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "localhost:3000/collections/4",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"collections",
+										"4"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "32"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"20-Tmz0bkzY1UOUrEY4Fu6vNtcrWP0\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 20 Aug 2023 22:41:27 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "ERROR AL ELIMINAR LA RECOLECCION"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "optimalRoute",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTcxMzU5LCJleHAiOjE2OTI1NzE5NTl9.uMMl-uAnFV6J11Bs_uO0bZQRPRODvzg3_faVO-Z0Mzg",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"materials\": [\r\n        {\r\n            \"name\": \"CARTON\",\r\n            \"weight\": 1,\r\n            \"value\": 40000\r\n        },\r\n        {\r\n            \"name\": \"CARTON\",\r\n            \"weight\": 6,\r\n            \"value\": 5000\r\n        }\r\n    ],\r\n    \"totalWeight\": 7\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/optimalRoute",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"optimalRoute"
+					]
+				},
+				"description": "En este servicio se pasa un arreglo de materiales y un peso limite de carga con esta información el servicio devolverá cuál es la mejor opción de qué materiales llevar teniendo en cuenta el peso límite y el valor agregado de cada material"
+			},
+			"response": [
+				{
+					"name": "mejor-decision",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY3ODA0LCJleHAiOjE2OTI1Njg0MDR9.veKkfWZNXYcPJEEK2_0mHoHenNJV0Hp1hKRyMC9KmQo",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"materials\": [\r\n        {\r\n            \"name\": \"PAPEL\",\r\n            \"weight\": 1,\r\n            \"value\": 40000\r\n        },\r\n        {\r\n            \"name\": \"CARTON\",\r\n            \"weight\": 6,\r\n            \"value\": 5000\r\n        }\r\n    ],\r\n    \"totalWeight\": 7\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/optimalRoute",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"optimalRoute"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "127"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"7f-3H66Ygw5jESoluvrCSX5MQkazdA\""
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 20 Aug 2023 21:44:19 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"LA MEJOR DECISION A TOMAR\",\n    \"result\": [\n        {\n            \"name\": \"PAPEL\",\n            \"total\": 40000\n        },\n        {\n            \"name\": \"CARTON\",\n            \"total\": 30000\n        }\n    ],\n    \"total\": 70000\n}"
+				},
+				{
+					"name": "propiedades-faltantes",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY3ODA0LCJleHAiOjE2OTI1Njg0MDR9.veKkfWZNXYcPJEEK2_0mHoHenNJV0Hp1hKRyMC9KmQo",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/optimalRoute",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"optimalRoute"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "85"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"55-WMKBnzquCIsHDFv1qAcHxvPMypw\""
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 20 Aug 2023 21:44:37 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    \"La propiedad materials es obligatoria.\",\n    \"La propiedad totalWeight es obligatoria.\"\n]"
+				},
+				{
+					"name": "producto-inexistente",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTY3ODA0LCJleHAiOjE2OTI1Njg0MDR9.veKkfWZNXYcPJEEK2_0mHoHenNJV0Hp1hKRyMC9KmQo",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"materials\": [\r\n        {\r\n            \"name\": \"PAPEL 2\",\r\n            \"weight\": 1,\r\n            \"value\": 40000\r\n        },\r\n        {\r\n            \"name\": \"CARTON\",\r\n            \"weight\": 6,\r\n            \"value\": 5000\r\n        }\r\n    ],\r\n    \"totalWeight\": 7\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/optimalRoute",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"optimalRoute"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "html",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/html; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "49"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"31-iEe9xfkPn0+ZlB+qO/xybfgnwK8\""
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 20 Aug 2023 21:45:00 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "LOS SIGUIENTES MATERIALES NO EXISTEN: [\"PAPEL 2\"]"
+				},
+				{
+					"name": "sin-autorizacion",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"materials\": [\r\n        {\r\n            \"name\": \"PAPEL\",\r\n            \"weight\": 1,\r\n            \"value\": 40000\r\n        },\r\n        {\r\n            \"name\": \"CARTON\",\r\n            \"weight\": 6,\r\n            \"value\": 5000\r\n        }\r\n    ],\r\n    \"totalWeight\": 7\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/optimalRoute",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"optimalRoute"
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": "html",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/html; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "54"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"36-o7GyLC4Efvce0a+w4wWauMDE0Cg\""
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 20 Aug 2023 21:51:16 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "NECESITAS UN TOKEN VALIDO PARA ACCEDER A ESTE SERVICIO"
+				},
+				{
+					"name": "error-al-procesar",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZmdhcmNpYTE1IiwiaWF0IjoxNjkyNTcxMzU5LCJleHAiOjE2OTI1NzE5NTl9.uMMl-uAnFV6J11Bs_uO0bZQRPRODvzg3_faVO-Z0Mzg",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"materials\": [\r\n        {\r\n            \"name\": \"CARTON\",\r\n            \"weight\": 1,\r\n            \"value\": 40000\r\n        },\r\n        {\r\n            \"name\": \"CARTON\",\r\n            \"weight\": 6,\r\n            \"value\": 5000\r\n        }\r\n    ],\r\n    \"totalWeight\": 7\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/optimalRoute",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"optimalRoute"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "html",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/html; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "50"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"32-SrkiulvjmtVwwQm/L+qDWybOgz4\""
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 20 Aug 2023 22:43:58 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "ERROR AL PROCESAR LA INFORMACION DE LOS MATERIALES"
+				}
+			]
+		}
+	]
+}
